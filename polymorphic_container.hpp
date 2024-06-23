@@ -16,8 +16,10 @@ public:
 };
 
 template<typename T>
+
+//see if this is the right way
 void polymorphic_container<T>::add(T* ptr) {
-	ptrs.push_back(ptr);
+	ptrs.push_back(polymorphic_ptr<T>(ptr);
 }
 template<typename T>
 size_t polymorphic_container<T>::getPtrsCount() const {

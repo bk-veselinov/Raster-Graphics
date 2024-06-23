@@ -2,7 +2,7 @@
 
 const MyString& ImgFactory::getFileType(const MyString& img) const
 {
-	// TODO: insert return statement here
+	return img.SubString(img.getLength()-3);
 }
 
 Img* ImgFactory::createCollage(const MyString& name, const Img* img1, const Img* img2, bool isVertical)

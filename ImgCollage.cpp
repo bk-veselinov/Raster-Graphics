@@ -19,3 +19,8 @@ ImgCollage::ImgCollage(const MyString& name, const Img* _img1, const Img* _img2,
 	currState = _img1->GetState();
 	
 }
+
+Img* ImgCollage::Clone() const
+{
+	return new (std::nothrow)ImgCollage(*this);
+}

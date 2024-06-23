@@ -18,8 +18,36 @@ enum class Modifications
 	monochrome,
 	grayscale,
 	negative,
-	rotation
+	rotationLeft,
+	rotationRight
+
 };
+
+const MyString ModificationToString(const Modifications& mod) {
+	if (mod == Modifications::monochrome)
+	{
+		return "monochrome";
+	}
+	if (mod == Modifications::grayscale)
+	{
+		return "grayscale";
+	}
+	if (mod == Modifications::monochrome)
+	{
+		return "Monochrome";
+	}
+	if (mod == Modifications::negative)
+	{
+		return "negative";
+	}if (mod == Modifications::rotationLeft)
+	{
+		return "rotation left";
+	}if (mod == Modifications::rotationRight)
+	{
+		return "rotation right";
+	}
+	return "Unknown";
+}
 
 
 

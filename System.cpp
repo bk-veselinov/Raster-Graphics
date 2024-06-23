@@ -1,10 +1,5 @@
 #include "System.h"
 
-const Img* System::readImg() const
-{
-
-	return nullptr;
-}
 
 int System::findImg(const MyString& name)
 {
@@ -77,11 +72,20 @@ void System::run()
 
 void System::load()
 {
-	int sessionNum;
-	std::cin >> sessionNum;
-	//TODO check if out of range or session closed
+	char* buffer = new char[BUFFER_SIZE];
+	std::cin.getline(buffer, BUFFER_SIZE);
+	std::stringstream ss(buffer);
+	Session newSesion(sessions.getSize());
+	MyString currImg;
+	while (ss>>currImg)
+	{
+		Img* img = factory.createImg(currImg);
+		images.add(img);
+		newSesion.addImg(img);
+	}
+	sessions.pushBack(newSesion);
+	//logger newsession.id or len-1
 
-	activeSession = sessionNum;
 }
 
 void System::add()
@@ -91,11 +95,11 @@ void System::add()
 	int imgIdx = findImg(imgName);
 	if (imgIdx == -1)
 	{
-		images.add(factory.createImg(imgName));
-		sessions[activeSession].addImg(factory.createImg(imgName));
+		Img* img = factory.createImg(imgName);
+		images.add(img);
+		sessions[activeSession].addImg(img);
 		return;
 	}
-	//Check if it uses the same pic or new. Make it so that session add creates a copy
 	sessions[activeSession].addImg(&images[imgIdx]);
 }
 
@@ -105,13 +109,23 @@ void System::help() const
 
 void System::save()
 {
-	//must save in public img arr
 	sessions[activeSession].save();
+	const polymorphic_container<Img>& activeSessionImages = sessions[activeSession].GetImages();
+
+	for (size_t i = 0; i < activeSessionImages.getPtrsCount(); i++)
+	{
+		int imgIdx = findImg(activeSessionImages[i].GetName());
+		if (imgIdx==-1)
+		{
+			std::cout << "Image not found\n";
+			continue;
+		}
+		images[imgIdx] = activeSessionImages[i];
+	}
 }
 
 void System::saveAs()
 {
-	//check if pic with this name exsits
 	MyString newFileName;
 	std::cin >> newFileName;
 	if (findImg(newFileName)!=-1)
@@ -119,8 +133,31 @@ void System::saveAs()
 		std::cout << "An image with whis photo already exist\n";
 		return;
 	}
+	const polymorphic_container<Img>& activeSessionImages = sessions[activeSession].GetImages();
+	MyString firstImgInitialName = activeSessionImages[0].GetName();
+
 	sessions[activeSession].saveAs(newFileName);
 
+	int imgIdx = findImg(firstImgInitialName);
+	if (imgIdx == -1)
+	{
+		std::cout << "Image not found\n";
+	}
+	else
+	{
+		images[imgIdx] = activeSessionImages[0];
+	}
+
+	for (size_t i = 1; i < activeSessionImages.getPtrsCount(); i++)
+	{
+		imgIdx = findImg(activeSessionImages[i].GetName());
+		if (imgIdx == -1)
+		{
+			std::cout << "Image not found\n";
+			continue;
+		}
+		images[imgIdx] = activeSessionImages[i];
+	}
 }
 
 void System::close()
@@ -136,16 +173,24 @@ void System::sessinInfo() const
 
 void System::switchSession()
 {
-	//add if exsits
 
 	int newSesionNum;
 	std::cin >> newSesionNum;
+	if (newSesionNum >= sessions.getSize())
+	{
+		std::cout << "There is no nession with id " << newSesionNum;
+		return;
+	}
+	if (sessions[newSesionNum].GetId() == -1)
+	{
+		std::cout << "The session with that ID was closed - id " << newSesionNum;
+		return;
+	}
 	activeSession = newSesionNum;
 }
 
 void System::createCollage()
 {
-	//change session create collage. must copy the collage 159
 	MyString diraction;
 	MyString img1;
 	MyString img2;
@@ -171,7 +216,7 @@ void System::createCollage()
 	}
 
 	Img* newCollage = factory.createCollage(collageName, &images[firstImgIdx], &images[secondImgIdx], diraction == "vertical");
-	sessions[activeSession].createCollage(collageName, img1, img2, diraction == "vertical");
+	sessions[activeSession].createCollage(newCollage, img1, img2);
 	images.add(newCollage);
 }
 
@@ -194,7 +239,21 @@ void System::negative()
 
 void System::rotate()
 {
-	sessions[activeSession].addModification(Modifications::rotation);
+	MyString direction;
+	std::cin >> direction;
+
+	if (direction == "left")
+	{
+		sessions[activeSession].addModification(Modifications::rotationLeft);
+		return;
+	}
+	if (direction == "right")
+	{
+		sessions[activeSession].addModification(Modifications::rotationRight);
+		return;
+	}
+
+	std::cout << "Invalid direction\n";
 
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+//github terziev
 
 class MyString {
 private:
@@ -16,7 +17,7 @@ public:
 	MyString(const MyString& other);
 	MyString& operator=(const MyString& other);
 	~MyString();
-
+	MyString SubString(int beginIdx)const;
 	const char* c_str() const;
 	size_t getLength() const;
 

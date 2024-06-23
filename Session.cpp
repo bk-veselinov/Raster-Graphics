@@ -53,10 +53,17 @@ void Session::printImagesNames() const
 void Session::printModifications() const
 {
 	std::cout << "Pending modifications:\n";
-	for (size_t i = 0; i < length; i++)
+	MyStack<Modifications, MAX_MODIFICATIONS_STACK_COUNT> stackToPrint(modifications);
+	while (!stackToPrint.isEmpty())
 	{
-
+		
+		std::cout << ModificationToString(stackToPrint.peek());
+		stackToPrint.pop();
 	}
+}
+int Session::GetId() const
+{
+	return id;
 }
 //TODO DELETE IMG** from the func that passes it
 Session::Session(unsigned id,  Img** const img, size_t imgCount):id(id)
@@ -67,7 +74,17 @@ Session::Session(unsigned id,  Img** const img, size_t imgCount):id(id)
 	}
 }
 
-void Session::createCollage(const MyString& name, const MyString& img1, const MyString& img2, bool isVertical)
+Session::Session(unsigned id):id(id)
+{
+
+}
+
+const polymorphic_container<Img>& Session::GetImages() const
+{
+	return images;
+}
+
+void Session::createCollage(Img* collage, const MyString& img1, const MyString& img2)
 {//TODO 1)change exception(should specify why cannot create eg. type mismach or h w) 
 	//  2)create collage and add it to imgs
 	size_t img1Idx = getImgIdx(img1);
@@ -78,16 +95,9 @@ void Session::createCollage(const MyString& name, const MyString& img1, const My
 	{
 		throw std::exception("Could not find the images in the active session\n");
 	}
-	if (images[img1Idx].GetImgType() != images[img2Idx].GetImgType())
-	{
-		throw std::exception(("Cannot create collage with images with different types("+ images[img1Idx].GetImgType()+ " " + images[img2Idx].GetImgType()+")\n").c_str());
-	}
-	if (!images[img1Idx].isSizeCompatableWith(&images[img2Idx]))
-	{
-		throw std::exception("Images width and height does not match\n");
-	}
+	
 
-	addImg(new ImgCollage(name, &images[img1Idx], &images[img2Idx],  isVertical));
+	addImg(collage);
 }
 
 void Session::addImg(Img* newImg)

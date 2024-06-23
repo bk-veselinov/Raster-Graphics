@@ -51,10 +51,9 @@ void Img::SetName(const MyString& _name)
 
 void Img::addModification(const Modifications& currMod)
 {
-    //if curr satet || pending satate are mono -> cannot change to grayscale
-    //change the casting
+    
 
-    if (currMod == Modifications::rotation){
+    if (currMod == Modifications::rotationLeft|| currMod == Modifications::rotationRight){
         rotationsCount++;
     }
     else if (currMod == Modifications::negative) {
@@ -83,8 +82,7 @@ void Img::addModification(const Modifications& currMod)
 
 void Img::undo(const Modifications& lastModificationType)
 {
-    //TODO: if last mod != pendingStatesModifications.peek do not change
-    if (lastModificationType == Modifications::rotation)
+    if (lastModificationType == Modifications::rotationLeft || lastModificationType == Modifications::rotationRight)
     {
         if (!(rotationsCount > 0))
         {
@@ -135,7 +133,6 @@ void Img::save()
 
 bool Img::isSizeCompatableWith(const Img* other) const
 {
-    //check for rotations
     if (rotationsCount%2==0 && other->rotationsCount%2==0)
     {
         return (width==other->width && height == other->height);

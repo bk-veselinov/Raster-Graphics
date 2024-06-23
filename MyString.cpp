@@ -50,6 +50,11 @@ MyString::~MyString() {
 	free();
 }
 
+MyString MyString::SubString(int beginIdx)
+{
+	return MyString(data+beginIdx);
+}
+
 const char* MyString::c_str() const {
 	return data;
 }

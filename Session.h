@@ -4,20 +4,24 @@
 #include "MyString.h"
 #include "ImgCollage.h"
 
-const Modifications& stringToModiification(const char* str) {
-	if (strcmp(str, "rotation")==0)
+const Modifications& stringToModiification(const MyString& str) {
+	if (str=="rotation left")
 	{
-		return Modifications::rotation;
+		return Modifications::rotationLeft;
 	}
-	if (strcmp(str, "monochrome") == 0)
+	if (str == "rotation right")
+	{
+		return Modifications::rotationRight;
+	}
+	if (str == "monochrome")
 	{
 		return Modifications::monochrome;
 	}
-	if (strcmp(str, "grayscale") == 0)
+	if (str == "grayscale")
 	{
 		return Modifications::grayscale;
 	}
-	if (strcmp(str, "negative") == 0)
+	if (str == "negative")
 	{
 		return Modifications::negative;
 	}
@@ -39,9 +43,11 @@ class Session
 	void printImagesNames()const;
 	void printModifications()const;
 public:
+	int GetId()const;
 	Session(unsigned id,  Img** const img, size_t imgCount);
-
-	void createCollage(const MyString& name, const MyString& img1, const MyString& img2, bool isVertical);
+	Session(unsigned id);
+	const polymorphic_container<Img>& GetImages()const;
+	void createCollage(Img* collage, const MyString& img1, const MyString& img2);
 	void addImg( Img* newImg);
 	void addModification(const Modifications& mod);
 	void printInfo()const;
