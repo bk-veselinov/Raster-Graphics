@@ -85,7 +85,6 @@ void System::load()
 		std::cout << "Image " << currImg << "added succesfuly\n";
 	}
 	sessions.pushBack(newSesion);
-	//logger newsession.id or len-1
 
 }
 
@@ -110,6 +109,11 @@ void System::add()
 
 void System::help() const
 {
+	std::cout << "This is console raster graphic app that uses commands in order to modify images\n";
+	std::cout << "Main commands:\nload <images separated by sapce>, close, save, save as <new name>, help, exit\n";
+	std::cout << "Commands for modification:\n";
+	std::cout << "grayscale,\n monochrome,\n negative,\n rotate <direction>,\n undo,\n add <image>,\n session info\n";
+	std::cout << "switch <session>,\n collage <direction> <image1> <image2> <outimage>\n";
 }
 
 void System::save()
