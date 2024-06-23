@@ -1,5 +1,6 @@
 
 #include <iostream>
+//github terziev
 
 template <typename T, const unsigned S>
 class MyStack

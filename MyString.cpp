@@ -50,7 +50,7 @@ MyString::~MyString() {
 	free();
 }
 
-MyString MyString::SubString(int beginIdx)
+MyString MyString::SubString(int beginIdx)const
 {
 	return MyString(data+beginIdx);
 }
