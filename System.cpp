@@ -82,6 +82,7 @@ void System::load()
 		Img* img = factory.createImg(currImg);
 		images.add(img);
 		newSesion.addImg(img);
+		std::cout << "Image " << currImg << "added succesfuly\n";
 	}
 	sessions.pushBack(newSesion);
 	//logger newsession.id or len-1
@@ -98,9 +99,13 @@ void System::add()
 		Img* img = factory.createImg(imgName);
 		images.add(img);
 		sessions[activeSession].addImg(img);
+		std::cout << "Image " << imgName << "added to the current active session\n";
+
 		return;
 	}
 	sessions[activeSession].addImg(&images[imgIdx]);
+	std::cout << "Image " << imgName << "added to the current active session\n";
+
 }
 
 void System::help() const
@@ -187,6 +192,9 @@ void System::switchSession()
 		return;
 	}
 	activeSession = newSesionNum;
+	std::cout << "You switch to session with id " << newSesionNum<<"\n";
+	sessions[activeSession].printInfo();
+
 }
 
 void System::createCollage()
@@ -216,8 +224,15 @@ void System::createCollage()
 	}
 
 	Img* newCollage = factory.createCollage(collageName, &images[firstImgIdx], &images[secondImgIdx], diraction == "vertical");
-	sessions[activeSession].createCollage(newCollage, img1, img2);
-	images.add(newCollage);
+	try {
+		sessions[activeSession].createCollage(newCollage, img1, img2);
+		images.add(newCollage);
+		std::cout << "New collage added(" << collageName << ")\n";
+
+	}
+	catch (std::exception& e) {
+		std::cout << e.what() << '\n';
+	}
 }
 
 void System::grayscale()
