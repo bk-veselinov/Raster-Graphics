@@ -25,8 +25,10 @@ Img* ImgFactory::createImg(const MyString& img) const
 	MyString type = getFileType(img);
 	unsigned w;
 	unsigned h;
-	std::ifstream in((char*)&w, std::ios::binary);
-	std::ifstream in((char*)&h, std::ios::binary);
+	std::ifstream in(img.c_str(), std::ios::binary);
+
+	in.read((char*)&w, sizeof(w));
+	in.read((char*)&h, sizeof(h));
 	if (type == "ppm")
 	{
 		return createPPM(img, w, h);

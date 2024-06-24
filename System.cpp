@@ -80,9 +80,10 @@ void System::load()
 	while (ss>>currImg)
 	{
 		Img* img = factory.createImg(currImg);
-		images.add(img);
 		newSesion.addImg(img);
+		images.add(img);
 		std::cout << "Image " << currImg << "added succesfuly\n";
+		delete img;
 	}
 	sessions.pushBack(newSesion);
 
@@ -99,6 +100,7 @@ void System::add()
 		images.add(img);
 		sessions[activeSession].addImg(img);
 		std::cout << "Image " << imgName << "added to the current active session\n";
+		delete img;
 
 		return;
 	}
@@ -232,6 +234,7 @@ void System::createCollage()
 		sessions[activeSession].createCollage(newCollage, img1, img2);
 		images.add(newCollage);
 		std::cout << "New collage added(" << collageName << ")\n";
+		delete newCollage;
 
 	}
 	catch (std::exception& e) {

@@ -130,6 +130,11 @@ void Img::save()
     pendingNegativeModificationsCount = 0;
 }
 
+void Img::saveAs(const MyString& newFileName) {
+    name = newFileName;
+    save();
+}
+
 
 bool Img::isSizeCompatableWith(const Img* other) const
 {

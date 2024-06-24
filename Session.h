@@ -4,34 +4,10 @@
 #include "MyString.h"
 #include "ImgCollage.h"
 
-const Modifications& stringToModiification(const MyString& str) {
-	if (str=="rotation left")
-	{
-		return Modifications::rotationLeft;
-	}
-	if (str == "rotation right")
-	{
-		return Modifications::rotationRight;
-	}
-	if (str == "monochrome")
-	{
-		return Modifications::monochrome;
-	}
-	if (str == "grayscale")
-	{
-		return Modifications::grayscale;
-	}
-	if (str == "negative")
-	{
-		return Modifications::negative;
-	}
-}
+
 
 class Session
 {
-	//TODO add collage direction
-	//print
-	//add close command
 	int id = -1;
 	polymorphic_container<Img> images;
 	MyStack<Modifications, MAX_MODIFICATIONS_STACK_COUNT> modifications;
@@ -43,6 +19,8 @@ class Session
 	void printImagesNames()const;
 	void printModifications()const;
 public:
+
+	Session() = default;
 	int GetId()const;
 	Session(unsigned id,  Img** const img, size_t imgCount);
 	Session(unsigned id);

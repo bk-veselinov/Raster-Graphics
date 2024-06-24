@@ -2,79 +2,14 @@
 #include "MyString.h"
 #include "Vector.hpp"
 #include "Stack.hpp"
+#include "HelperFunctions.h"
 #include <exception>
 
 constexpr unsigned MAX_MODIFICATIONS_STACK_COUNT = 64;
 
-enum States {
-	monochrome,
-	grayscale,
-	color,
-	defaultState
-};
-
-enum class Modifications
-{
-	monochrome,
-	grayscale,
-	negative,
-	rotationLeft,
-	rotationRight
-
-};
-
-const MyString ModificationToString(const Modifications& mod) {
-	if (mod == Modifications::monochrome)
-	{
-		return "monochrome";
-	}
-	if (mod == Modifications::grayscale)
-	{
-		return "grayscale";
-	}
-	if (mod == Modifications::monochrome)
-	{
-		return "Monochrome";
-	}
-	if (mod == Modifications::negative)
-	{
-		return "negative";
-	}if (mod == Modifications::rotationLeft)
-	{
-		return "rotation left";
-	}if (mod == Modifications::rotationRight)
-	{
-		return "rotation right";
-	}
-	return "Unknown";
-}
-
-
-
-const States& ConvertModificationToState(const Modifications& mod) {
-	switch (mod)
-	{
-	case Modifications::monochrome:
-		return States::monochrome;
-		break;
-
-	case Modifications::grayscale:
-		return States::grayscale;
-		break;
-
-	default:
-		throw std::exception("Unknown state");
-		break;
-	}
-}
-
 
 class Img
 {
-	//TODO
-	//saveas
-	//save in file
-	//corect errors for collage creation
 protected:
 	MyString fileType;
 	MyString name = "Unknown";

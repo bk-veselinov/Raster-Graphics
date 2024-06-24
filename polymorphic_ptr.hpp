@@ -121,7 +121,7 @@ void polymorphic_ptr<T>::free() {
 
 template<typename T>
 void polymorphic_ptr<T>::copyFrom(const polymorphic_ptr& other) {
-	ptr = other.ptr->clone();
+	ptr = other.ptr->Clone();
 }
 
 template<typename T>
