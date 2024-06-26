@@ -5,6 +5,8 @@ int System::findImg(const MyString& name)
 {
 	for (size_t i = 0; i < images.getPtrsCount(); i++)
 	{
+		//std::cout << images[i].GetName()<<"\n";
+
 		if (name == images[i].GetName())
 		{
 			return i;
@@ -15,41 +17,47 @@ int System::findImg(const MyString& name)
 
 void System::run()
 {
+	char* buffCommand = new char[BUFFER_SIZE + 1];
 	MyString command;
-	std::cout << "Enter command: ";
-	std::cin >> command;
-	std::cout << '\n';
+
 
 	while (true)
 	{
-
+		std::cout << "Enter command: ";
+		std::cin >> buffCommand;
+		std::cout << '\n';
+		command = buffCommand;
 		if (command == "help")
 		{
 			help();
+			std::cout << "Enter command: ";
+
+			continue;
 		}
 		else if (command == "load") {
 			load();
+			continue;
 		}
 		else if (command == "exit") {
+			delete[] buffCommand;
 			return;
 		}
 		if (activeSession == -1)
 		{
 			std::cout << "There is no active session\n";
-			std::cin >> command;
 
 			continue;
 		}
 		if (command == "add") {
 			add();
 		}
-		else if (command == "createCollage") {
+		else if (command == "collage") {
 			createCollage();
 		}
-		else if (command == "switchSession") {
+		else if (command == "switch") {
 			switchSession();
 		}
-		else if (command == "sessinInfo") {
+		else if (command == "sessionInfo") {
 			sessinInfo();
 		}
 		else if (command == "close") {
@@ -61,11 +69,26 @@ void System::run()
 		else if (command == "save") {
 			save();
 		}
+		else if (command == "grayscale") {
+			grayscale();
+		}
+		else if (command == "monochrome") {
+			monochrome();
+		}
+		else if (command == "undo") {
+			undo();
+		}
+		else if (command == "rotate") {
+			rotate();
+		}
+		else if (command == "negative") {
+			negative();
+		}
 		else
 		{
 			std::cout << "invalud command\n";
 		}
-		std::cin >> command;
+		
 
 	}
 }
@@ -77,14 +100,28 @@ void System::load()
 	std::stringstream ss(buffer);
 	Session newSesion(sessions.getSize());
 	MyString currImg;
-	while (ss>>currImg)
+	while (ss>> buffer)
 	{
-		Img* img = factory.createImg(currImg);
-		newSesion.addImg(img);
-		images.add(img);
-		std::cout << "Image " << currImg << "added succesfuly\n";
-		delete img;
+		currImg = buffer;
+		int currImgidx = findImg(currImg);
+		if (currImgidx ==-1)
+		{
+			Img* img = factory.createImg(currImg);
+			newSesion.addImg(img);
+			images.add(img->Clone());
+		}
+		else
+		{
+			newSesion.addImg(images[currImgidx].Clone());
+		}
+		std::cout << "Image " << currImg << " added succesfuly\n";
+
+		
+		//delete img;
 	}
+	delete[] buffer;
+
+	activeSession = newSesion.GetId();
 	sessions.pushBack(newSesion);
 
 }
@@ -92,6 +129,7 @@ void System::load()
 void System::add()
 {
 	MyString imgName;
+	std::cin.ignore();
 	std::cin >> imgName;
 	int imgIdx = findImg(imgName);
 	if (imgIdx == -1)
@@ -99,23 +137,23 @@ void System::add()
 		Img* img = factory.createImg(imgName);
 		images.add(img);
 		sessions[activeSession].addImg(img);
-		std::cout << "Image " << imgName << "added to the current active session\n";
-		delete img;
+		std::cout << "Image " << imgName << " added to the current active session\n";
+		//delete img;
 
 		return;
 	}
 	sessions[activeSession].addImg(&images[imgIdx]);
-	std::cout << "Image " << imgName << "added to the current active session\n";
+	std::cout << "Image " << imgName << " added to the current active session\n";
 
 }
 
 void System::help() const
 {
 	std::cout << "This is console raster graphic app that uses commands in order to modify images\n";
-	std::cout << "Main commands:\nload <images separated by sapce>, close, save, save as <new name>, help, exit\n";
+	std::cout << "Main commands:\n load <images separated by sapce>\n close\n save\n save as <new name>\n help\n exit\n";
 	std::cout << "Commands for modification:\n";
-	std::cout << "grayscale,\n monochrome,\n negative,\n rotate <direction>,\n undo,\n add <image>,\n session info\n";
-	std::cout << "switch <session>,\n collage <direction> <image1> <image2> <outimage>\n";
+	std::cout << " grayscale\n monochrome\n negative\n rotate <direction>\n undo\n add <image>,\n session info\n";
+	std::cout << " switch <session>\n collage <direction> <image1> <image2> <outimage>\n";
 }
 
 void System::save()
@@ -138,6 +176,7 @@ void System::save()
 void System::saveAs()
 {
 	MyString newFileName;
+	std::cin.ignore();
 	std::cin >> newFileName;
 	if (findImg(newFileName)!=-1)
 	{
@@ -205,15 +244,27 @@ void System::switchSession()
 
 void System::createCollage()
 {
-	MyString diraction;
+	MyString direction;
 	MyString img1;
 	MyString img2;
 	MyString collageName;
+	char* buff = new char[BUFFER_SIZE];
+	
+	std::cin.ignore();
+	std::cin >> buff;
+	direction = buff;
+	
+	std::cin.ignore();
+	std::cin >> buff;
+	img1 = buff;
 
-	std::cin >> diraction;
-	std::cin >> img1;
-	std::cin >> img2;
-	std::cin >> collageName;
+	std::cin.ignore();
+	std::cin >> buff;
+	img2 = buff;
+
+	std::cin.ignore();
+	std::cin >> buff;
+	collageName = buff;
 
 	if (findImg(collageName)!=-1)
 	{
@@ -226,15 +277,15 @@ void System::createCollage()
 	if (firstImgIdx==-1 || secondImgIdx==-1)
 	{
 		std::cout << "The images could not be found\n";
-		return;
+		return; 
 	}
-
-	Img* newCollage = factory.createCollage(collageName, &images[firstImgIdx], &images[secondImgIdx], diraction == "vertical");
+	
 	try {
+		Img* newCollage = factory.createCollage(collageName, &sessions[activeSession].GetImages()[firstImgIdx], &sessions[activeSession].GetImages()[secondImgIdx], direction == "vertical");
 		sessions[activeSession].createCollage(newCollage, img1, img2);
-		images.add(newCollage);
+		images.add(newCollage->Clone());
 		std::cout << "New collage added(" << collageName << ")\n";
-		delete newCollage;
+		//delete newCollage;
 
 	}
 	catch (std::exception& e) {
@@ -262,6 +313,7 @@ void System::negative()
 void System::rotate()
 {
 	MyString direction;
+	std::cin.ignore();
 	std::cin >> direction;
 
 	if (direction == "left")

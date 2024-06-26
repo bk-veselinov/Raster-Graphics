@@ -6,5 +6,10 @@ ImgPBM::ImgPBM(const MyString& name, unsigned w, unsigned h) : Img(name, w, h, S
 
 Img* ImgPBM::Clone() const
 {
-	return new (std::nothrow)ImgPBM(*this);
+	if (rotationsCount%2==0)
+	{
+		return new (std::nothrow)ImgPBM(name, width, height);
+	}
+	return new (std::nothrow)ImgPBM(name, height, width);
+
 }

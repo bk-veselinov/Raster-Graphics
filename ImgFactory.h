@@ -9,7 +9,7 @@ class ImgFactory
 {
 	//string view or string stream
 	//it is possible to have . in the name
-	const MyString& getFileType(const MyString& img)const;
+	const MyString getFileType(const MyString& img)const;
 public:
 	Img* createCollage(const MyString& name, const Img* img1, const Img* img2, bool isVertical);
 	Img* createImg(const MyString& img)const;

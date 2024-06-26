@@ -1,6 +1,6 @@
 #include "ImgFactory.h"
 
-const MyString& ImgFactory::getFileType(const MyString& img) const
+const MyString ImgFactory::getFileType(const MyString& img) const
 {
 	return img.SubString(img.getLength()-3);
 }

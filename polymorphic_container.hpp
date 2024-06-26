@@ -19,7 +19,6 @@ public:
 
 template<typename T>
 
-//see if this is the right way
 void polymorphic_container<T>::add(T* ptr) {
 	ptrs.pushBack(polymorphic_ptr<T>(ptr));
 }

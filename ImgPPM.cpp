@@ -6,5 +6,9 @@ ImgPPM::ImgPPM(const MyString& name, unsigned w, unsigned h): Img(name, w, h , S
 
 Img* ImgPPM::Clone() const
 {
-	return new (std::nothrow)ImgPPM(*this);
+	if (rotationsCount % 2 == 0)
+	{
+		return new (std::nothrow)ImgPPM(name, width, height);
+	}
+	return new (std::nothrow)ImgPPM(name, height, width);
 }

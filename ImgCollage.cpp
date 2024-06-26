@@ -22,5 +22,15 @@ ImgCollage::ImgCollage(const MyString& name, const Img* _img1, const Img* _img2,
 
 Img* ImgCollage::Clone() const
 {
-	return new (std::nothrow)ImgCollage(*this);
+	Img* firstImg = (*img1).Clone();
+	Img* secondImg = (*img2).Clone();
+
+	if (rotationsCount % 2 == 0)
+	{
+		return new (std::nothrow)ImgCollage(name, firstImg, secondImg, (*img1).GetHeight() == height);
+	}
+
+	firstImg->addModification(Modifications::rotationLeft);
+	secondImg->addModification(Modifications::rotationLeft);
+	return new (std::nothrow)ImgCollage(name, firstImg, secondImg, (*img1).GetHeight() == height);
 }

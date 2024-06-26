@@ -57,9 +57,10 @@ void Session::printModifications() const
 	while (!stackToPrint.isEmpty())
 	{
 		
-		std::cout << ModificationToString(stackToPrint.peek());
+		std::cout << ModificationToString(stackToPrint.peek())<< " ";
 		stackToPrint.pop();
 	}
+	std::cout << '\n';
 }
 int Session::GetId() const
 {
@@ -107,6 +108,7 @@ void Session::addImg(Img* newImg)
 
 void Session::addModification(const Modifications& mod)
 {
+	modifications.push(mod);
 	addModificationToImages(mod);
 }
 

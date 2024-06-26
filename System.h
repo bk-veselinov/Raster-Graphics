@@ -12,8 +12,6 @@ class System
 	int activeSession = -1;
 	ImgFactory factory;
 	int findImg(const MyString& name);
-public:
-	void run();
 	void load();
 	void add();
 	void help()const;
@@ -28,6 +26,9 @@ public:
 	void negative();
 	void rotate();
 	void undo();
+public:
+	void run();
+	
 
 };
 

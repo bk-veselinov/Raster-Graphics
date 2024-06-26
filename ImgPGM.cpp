@@ -6,6 +6,10 @@ ImgPGM::ImgPGM(const MyString& name, unsigned w, unsigned h) : Img(name, w, h, S
 
 Img* ImgPGM::Clone() const
 {
-	return new (std::nothrow)ImgPGM(*this);
+	if (rotationsCount % 2 == 0)
+	{
+		return new (std::nothrow)ImgPGM(name, width, height);
+	}
+	return new (std::nothrow)ImgPGM(name, height, width);
 
 }

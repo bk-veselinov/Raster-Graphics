@@ -2,9 +2,27 @@
 //
 
 #include <iostream>
+#include <fstream>
+#include "System.h"
+
+void createFile(const MyString& fileName, unsigned w, unsigned h) {
+    std::ofstream out(fileName.c_str(), std::ios::binary);
+
+    out.write((const char*)&w, sizeof(w));
+    out.write((const char*)&h, sizeof(w));
+}
 
 int main()
 {
+    createFile("img3.ppm", 15, 10);
+    createFile("img4.pgm", 10, 15);
+    
+    System s;
+    s.run();
+
+
+    
+
     std::cout << "Hello World!\n";
 }
 
